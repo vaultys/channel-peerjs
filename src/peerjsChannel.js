@@ -16,7 +16,7 @@ export class PeerjsChannel {
     this.key = key ? key : crypto.randomBytes(32).toString("hex");
     this.id = crypto.hash("sha256", Buffer.from(`vaultys-${this.status}-${this.key}`)).toString("hex");
     this.otherid = crypto.hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`)).toString("hex");
-    const options = { polyfills, debug: 2 };
+    const options = { debug: 2 };
     options.host = this.host;
     options.secure = true;
     this.peer = new Peer(this.id, options);
