@@ -5,7 +5,7 @@ import { CryptoChannel, crypto } from '@vaultyshq/id';
 const Peer = peerjs.Peer ? peerjs.Peer : peerjs;
 
 export class PeerjsChannel {
-  constructor(key, status, host = "peerjs.92k.de", polyfills = null) {
+  constructor(key, status, host = "peerjs.92k.de") {
     this.host = host;
     if (status) {
       this.status = status;
@@ -51,29 +51,37 @@ export class PeerjsChannel {
     return `vaultys://peerjs?key=${this.key}&host=${this.host}`;
   }
 
-  async start(onConnect) {
+  async start() {
     const that = this;
-    console.log(that);
+    //console.log(that);
     if (this.status === "receiver") {
-      if(onConnect) {
-        if(!await onConnect()) {
-          this.close();
-          return;
-        }
+      const result = Swal ? await Swal.fire({
+        title: "New contact incoming",
+        text: "Do you want to accept this new contact ?",
+        icon: "info",
+        showCancelButton: true,
+      }) : {isConfirmed: true};
+      if (!result.isConfirmed) {
+        that.close();
       } else {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
-      this.conn = this.peer.connect(this.otherid);
-      that.conn.on("open", (id) => {
-        console.log("open");
-        that.conn.on("data", (data) => {
-          //console.log("data", data);
-          that._onData(data);
+        Swal && Swal.fire({
+          title: "Please Wait !",
+          html: "Contacting through a secure Tunnel",
+          allowOutsideClick: false,
         });
-        that.conn.on("close", () => that.peer.destroy());
-        //console.log("_onStarted call", that);
-        that._onStarted();
-      });
+        Swal && Swal.showLoading();
+        this.conn = this.peer.connect(this.otherid);
+        that.conn.on("open", (id) => {
+          console.log("open");
+          that.conn.on("data", (data) => {
+            //console.log("data", data);
+            that._onData(data);
+          });
+          that.conn.on("close", () => that.peer.destroy());
+          //console.log("_onStarted call", that);
+          that._onStarted();
+        });
+      }
     }
     return new Promise((resolve) => (that._onStarted = resolve));
   }
