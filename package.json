@@ -1,6 +1,6 @@
 {
-  "name": "channel-peerjs",
-  "version": "0.1",
+  "name": "@vaultyshq/channel-peerjs",
+  "version": "0.1.0",
   "description": "P2P communication for the protocol Vaultys",
   "main": "index.js",
   "repository": "https://github.com/vaultys/channel-peerjs.git",
