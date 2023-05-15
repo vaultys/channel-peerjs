@@ -1,0 +1,3 @@
+[submodule "lib/vaultysid"]
+	path = lib/vaultysid
+	url = https://github.com/vaultys/vaultysid
