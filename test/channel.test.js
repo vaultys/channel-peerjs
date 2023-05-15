@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import WebSocket from 'ws';
 import FileReader from 'filereader';
 import assert from "assert";
-import PeerjsChannel from "peerjsChannel.js";
+import PeerjsChannel from "../src/peerjsChannel.js";
 import { IdManager } from "../lib/vaultysid/src/IdManager.js"
 import { VaultysId } from '../lib/vaultysid/src/VaultysId.js';
 

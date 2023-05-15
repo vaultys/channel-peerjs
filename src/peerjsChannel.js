@@ -1,7 +1,6 @@
 
 import peerjs from 'peerjs';
-import { randomBytes, hash } from "../lib/vaultysid/src/crypto.js";
-import CryptoChannel from "../lib/vaultysid/src/cryptoChannel.js";
+import { CryptoChannel, crypto } from '@vaultyshq/id';
 
 const Peer = peerjs.Peer ? peerjs.Peer : peerjs;
 
@@ -14,9 +13,9 @@ class PeerjsChannel {
       this.status = key ? "receiver" : "initiator";
     }
     this.otherstatus = (this.status == "initiator") ? "receiver" : "initiator";
-    this.key = key ? key : randomBytes(32).toString("hex");
-    this.id = hash("sha256", Buffer.from(`vaultys-${this.status}-${this.key}`)).toString("hex");
-    this.otherid = hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`)).toString("hex");
+    this.key = key ? key : crypto.randomBytes(32).toString("hex");
+    this.id = crypto.hash("sha256", Buffer.from(`vaultys-${this.status}-${this.key}`)).toString("hex");
+    this.otherid = crypto.hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`)).toString("hex");
     const options = { polyfills, debug: 2 };
     options.host = this.host;
     options.secure = true;
