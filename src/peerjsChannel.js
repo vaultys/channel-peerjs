@@ -4,7 +4,7 @@ import { CryptoChannel, crypto } from '@vaultyshq/id';
 
 const Peer = peerjs.Peer ? peerjs.Peer : peerjs;
 
-class PeerjsChannel {
+export class PeerjsChannel {
   constructor(key, status, host = "peerjs.92k.de", polyfills = null) {
     this.host = host;
     if (status) {
@@ -96,4 +96,3 @@ class PeerjsChannel {
     this.peer.destroy();
   }
 }
-export default PeerjsChannel;
