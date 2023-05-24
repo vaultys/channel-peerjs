@@ -6,6 +6,7 @@
   "repository": "https://github.com/vaultys/channel-peerjs.git",
   "author": "François-Xavier Thoorens <fx.thoorens@vaultys.com>",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "@vaultyshq/id": "./lib/vaultysid/",
     "peerjs": "^1.4.7"
