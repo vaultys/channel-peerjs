@@ -1,6 +1,6 @@
 {
   "name": "@vaultyshq/channel-peerjs",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "P2P communication for the protocol Vaultys",
   "main": "index.js",
   "repository": "https://github.com/vaultys/channel-peerjs.git",
@@ -8,7 +8,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@vaultyshq/id": "./lib/vaultysid/",
-    "peerjs": "^1.4.7"
+    "@vaultyshq/id": "git+https://oauth2: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@github.com/vaultys/vaultysid.git",
+    "peerjs": "^1.5.2"
   }
 }
