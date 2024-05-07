@@ -1,5 +1,6 @@
 import { Peer, PeerOptions } from "peerjs";
-import { CryptoChannel, crypto } from "../../vaultysid";
+import { CryptoChannel, crypto } from "@vaultyshq/id";
+const { hash, randomBytes } = crypto;
 
 declare global {
   var Swal: {
@@ -40,8 +41,8 @@ export class PeerjsChannel {
       this.status = key ? "receiver" : "initiator";
     }
     this.otherstatus = this.status == "initiator" ? "receiver" : "initiator";
-    this.key = key ?? crypto.randomBytes(32).toString("hex");
-    this.id = crypto.hash("sha256", Buffer.from(`vaultys-${this.status}-${this.key}`)).toString("hex");
+    this.key = key ?? randomBytes(32).toString("hex");
+    this.id = hash("sha256", Buffer.from(`vaultys-${this.status}-${this.key}`)).toString("hex");
     this.otherid = crypto.hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`)).toString("hex");
     const options: PeerOptions = {
       debug: 2,
