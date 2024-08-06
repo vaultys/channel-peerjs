@@ -10,5 +10,6 @@
   "dependencies": {
     "@vaultyshq/id": "git+https://oauth2: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@github.com/vaultys/vaultysid.git",
     "peerjs": "^1.5.2"
-  }
+  },
+  "packageManager": "pnpm@9.6.0+sha512.38dc6fba8dba35b39340b9700112c2fe1e12f10b17134715a4aa98ccf7bb035e76fd981cf0bb384dfa98f8d6af5481c2bef2f4266a24bfa20c34eb7147ce0b5e"
 }

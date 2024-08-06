@@ -2,24 +2,6 @@ import { Peer, PeerOptions } from "peerjs";
 import { CryptoChannel, crypto } from "@vaultyshq/id";
 const { hash, randomBytes } = crypto;
 
-declare global {
-  var Swal: {
-    fire: ({
-      title,
-      text,
-      icon,
-      showCancelButton,
-    }: {
-      title?: string;
-      text?: string;
-      html?: string;
-      icon?: string;
-      showCancelButton?: boolean;
-      allowOutsideClick?: boolean;
-    }) => Promise<{ isConfirmed?: boolean }>;
-    showLoading: () => void;
-  };
-}
 
 export class PeerjsChannel {
   host: string;
@@ -54,7 +36,7 @@ export class PeerjsChannel {
     if (this.status == "initiator") {
       const that = this;
       that.peer.on("connection", (conn) => {
-        console.log("connection");
+        console.log("PeerJs connection incoming...");
         that.conn = conn;
         that.conn.on("data", (data: string) => {
           console.log("receiving: ", data);
@@ -89,44 +71,23 @@ export class PeerjsChannel {
 
   async start() {
     const that = this;
-    //console.log(that);
     if (this.status === "receiver") {
-      const result = Swal
-        ? await Swal.fire({
-            title: "New contact incoming",
-            text: "Do you want to accept this new contact ?",
-            icon: "info",
-            showCancelButton: true,
-          })
-        : { isConfirmed: true };
-      if (!result.isConfirmed) {
-        that.close();
-      } else {
-        Swal &&
-          Swal.fire({
-            title: "Please Wait !",
-            html: "Contacting through a secure Tunnel",
-            allowOutsideClick: false,
-          });
-        Swal && Swal.showLoading();
-        this.conn = this.peer.connect(this.otherid);
-        that.conn.on("open", (id: string) => {
-          console.log("open PeerJS Channel - ", id);
-          that.conn.on("data", (data: string) => {
-            console.log("receiving: ", data);
-            that._onData(Buffer.from(data, "base64"));
-          });
-          that.conn.on("close", () => that.peer.destroy());
-          //console.log("_onStarted call", that);
-          that._onStarted();
+      this.conn = this.peer.connect(this.otherid);
+      that.conn.on("open", (id: string) => {
+        console.log("opening PeerJS Channel...");
+        that.conn.on("data", (data: string) => {
+          console.log("receiving: ", data);
+          that._onData(Buffer.from(data, "base64"));
         });
-      }
+        that.conn.on("close", () => that.peer.destroy());
+        that._onStarted();
+      });
     }
     return new Promise<void>((resolve) => (that._onStarted = resolve));
   }
 
   send(data: Buffer) {
-    console.log("sending: ", data);
+    console.log("sending: ", data.toString("base64"));
     this.conn.send(data.toString("base64"));
   }
 
