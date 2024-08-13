@@ -1,7 +1,6 @@
-import { Peer, PeerOptions } from "peerjs";
+import { LogLevel, Peer, PeerOptions } from "peerjs";
 import { CryptoChannel, crypto } from "@vaultyshq/id";
 const { hash, randomBytes } = crypto;
-
 
 export class PeerjsChannel {
   host: string;
@@ -13,6 +12,7 @@ export class PeerjsChannel {
   peer: Peer;
   conn: any;
   _onStarted!: () => void;
+  _onError!: (error: string) => void;
   _onData!: (data: Buffer) => void;
 
   constructor(key?: string, status?: "initiator" | "receiver", host = "peerjs.92k.de") {
@@ -30,7 +30,12 @@ export class PeerjsChannel {
       debug: 2,
       host: this.host,
       secure: true,
-      logFunction: (level, ...rest) => console.log(level.toString(), rest),
+      logFunction: (level, ...rest) => {
+        console.log(level.toString(), rest);
+        if (level.toString() === "Error:") {
+          this._onError(rest[0]);
+        }
+      },
     };
     this.peer = new Peer(this.id, options);
     if (this.status == "initiator") {
@@ -83,7 +88,10 @@ export class PeerjsChannel {
         that._onStarted();
       });
     }
-    return new Promise<void>((resolve) => (that._onStarted = resolve));
+    return new Promise<void>((resolve, reject) => {
+      that._onStarted = resolve;
+      this._onError = reject;
+    });
   }
 
   send(data: Buffer) {
