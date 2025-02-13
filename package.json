@@ -1,29 +1,40 @@
 {
-  "name": "@vaultyshq/channel-peerjs",
-  "version": "2.0.0",
-  "description": "P2P communication for the protocol Vaultys",
+  "name": "@vaultys/channel-peerjs",
+  "version": "2.3.1",
+  "description": "P2P communication for the protocol Vaultys based on webRTC",
   "main": "index.js",
   "repository": "https://github.com/vaultys/channel-peerjs.git",
   "author": "François-Xavier Thoorens <fx.thoorens@vaultys.com>",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "test": "mocha",
+    "build:test": "webpack --config webpack.test.config.js",
+    "test:server": "http-server . -p 8080",
+    "test": "mocha --require tsx test/setup.ts --timeout 10000",
     "build": "tsc",
     "prettier": "find src -name \"*.js\" | xargs prettier --trailing-comma=all --write"
   },
   "dependencies": {
-    "@vaultyshq/id": "git+https://oauth2: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@github.com/vaultys/vaultysid.git",
+    "@vaultys/id": "^2.3.1",
     "peerjs": "^1.5.4"
   },
+  "optionalDependencies": {
+    "wrtc": "^0.4.7"
+  },
   "devDependencies": {
-    "@types/mocha": "^8.2.3",
-    "@types/node": "^22.2.0",
-    "@types/ws": "^8.5.12",
+    "@playwright/test": "^1.49.1",
+    "@types/chai": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.7",
+    "chai": "^5.1.2",
+    "http-server": "^14.1.1",
     "mocha": "^10.7.3",
+    "playwright": "^1.49.1",
     "prettier": "^3.3.3",
-    "tsx": "^4.17.0",
-    "typescript": "^5.5.4"
+    "ts-loader": "^9.5.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
   },
   "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf"
 }

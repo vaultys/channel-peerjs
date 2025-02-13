@@ -1,8 +1,8 @@
 import { LogLevel, Peer, PeerOptions } from "peerjs";
-import { CryptoChannel, crypto } from "@vaultyshq/id";
+import { Channel, CryptoChannel, crypto } from "@vaultys/id";
 const { hash, randomBytes } = crypto;
 
-export class PeerjsChannel {
+export class PeerjsChannel implements Channel {
   host: string;
   status: "initiator" | "receiver";
   otherstatus: string;
@@ -15,7 +15,11 @@ export class PeerjsChannel {
   _onError!: (error: string) => void;
   _onData!: (data: Buffer) => void;
 
-  constructor(key?: string, status?: "initiator" | "receiver", host = "peerjs.92k.de") {
+  constructor(
+    key?: string,
+    status?: "initiator" | "receiver",
+    host = "peerjs.92k.de",
+  ) {
     this.host = host;
     if (status) {
       this.status = status;
@@ -24,8 +28,13 @@ export class PeerjsChannel {
     }
     this.otherstatus = this.status == "initiator" ? "receiver" : "initiator";
     this.key = key ?? randomBytes(32).toString("hex");
-    this.id = hash("sha256", Buffer.from(`vaultys-${this.status}-${this.key}`)).toString("hex");
-    this.otherid = crypto.hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`)).toString("hex");
+    this.id = hash(
+      "sha256",
+      Buffer.from(`vaultys-${this.status}-${this.key}`),
+    ).toString("hex");
+    this.otherid = crypto
+      .hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`))
+      .toString("hex");
     const options: PeerOptions = {
       debug: 2,
       host: this.host,
@@ -94,7 +103,7 @@ export class PeerjsChannel {
     });
   }
 
-  send(data: Buffer) {
+  async send(data: crypto.Buffer) {
     console.log("sending: ", data.toString("base64"));
     this.conn.send(data.toString("base64"));
   }
