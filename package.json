@@ -2,7 +2,7 @@
   "name": "@vaultys/channel-peerjs",
   "version": "2.4.0",
   "description": "P2P communication for the protocol Vaultys based on webRTC",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/vaultys/channel-peerjs.git",
   "author": "François-Xavier Thoorens <fx.thoorens@vaultys.com>",
   "license": "MIT",
@@ -14,26 +14,26 @@
     "prettier": "find src -name \"*.js\" | xargs prettier --trailing-comma=all --write"
   },
   "dependencies": {
-    "@vaultys/id": "^2.3.1",
+    "@vaultys/id": "^2.4.0",
     "peerjs": "^1.5.4"
   },
   "optionalDependencies": {
     "wrtc": "^0.4.7"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.1",
-    "@types/chai": "^5.0.1",
+    "@playwright/test": "^1.51.1",
+    "@types/chai": "^5.2.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.10.7",
-    "chai": "^5.1.2",
+    "@types/node": "^22.13.10",
+    "chai": "^5.2.0",
     "http-server": "^14.1.1",
-    "mocha": "^10.7.3",
-    "playwright": "^1.49.1",
-    "prettier": "^3.3.3",
+    "mocha": "^10.8.2",
+    "playwright": "^1.51.1",
+    "prettier": "^3.5.3",
     "ts-loader": "^9.5.2",
-    "tsx": "^4.19.0",
-    "typescript": "^5.7.3",
-    "webpack": "^5.97.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1"
   },
   "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf"
