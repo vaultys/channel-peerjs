@@ -3,6 +3,7 @@
   "version": "2.4.0",
   "description": "P2P communication for the protocol Vaultys based on webRTC",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/vaultys/channel-peerjs.git",
   "author": "François-Xavier Thoorens <fx.thoorens@vaultys.com>",
   "license": "MIT",
