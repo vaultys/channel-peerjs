@@ -1,6 +1,6 @@
 import { LogLevel, Peer, PeerOptions } from "peerjs";
 import { Channel, CryptoChannel, crypto } from "@vaultys/id";
-const { hash, randomBytes } = crypto;
+const { randomBytes } = crypto;
 
 export class PeerjsChannel implements Channel {
   host: string;
@@ -13,7 +13,7 @@ export class PeerjsChannel implements Channel {
   conn: any;
   _onStarted!: () => void;
   _onError!: (error: string) => void;
-  _onData!: (data: Buffer) => void;
+  _onData!: (data: crypto.Buffer) => void;
 
   constructor(
     key?: string,
@@ -28,12 +28,14 @@ export class PeerjsChannel implements Channel {
     }
     this.otherstatus = this.status == "initiator" ? "receiver" : "initiator";
     this.key = key ?? randomBytes(32).toString("hex");
-    this.id = hash(
-      "sha256",
-      Buffer.from(`vaultys-${this.status}-${this.key}`),
-    ).toString("hex");
+    this.id = crypto
+      .hash("sha256", crypto.Buffer.from(`vaultys-${this.status}-${this.key}`))
+      .toString("hex");
     this.otherid = crypto
-      .hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`))
+      .hash(
+        "sha256",
+        crypto.Buffer.from(`vaultys-${this.otherstatus}-${this.key}`),
+      )
       .toString("hex");
     const options: PeerOptions = {
       debug: 2,
@@ -54,14 +56,14 @@ export class PeerjsChannel implements Channel {
         that.conn = conn;
         that.conn.on("data", (data: string) => {
           console.log("receiving: ", data);
-          that._onData(Buffer.from(data, "base64"));
+          that._onData(crypto.Buffer.from(data, "base64"));
         });
         that.conn.on("close", () => that.peer.destroy());
         //console.log("_onStarted call", that);
         that._onStarted();
       });
     }
-    CryptoChannel.encryptChannel(this, Buffer.from(this.key, "hex"));
+    CryptoChannel.encryptChannel(this, crypto.Buffer.from(this.key, "hex"));
   }
 
   static fromConnectionString(string: string) {
@@ -91,7 +93,7 @@ export class PeerjsChannel implements Channel {
         console.log("opening PeerJS Channel...");
         that.conn.on("data", (data: string) => {
           console.log("receiving: ", data);
-          that._onData(Buffer.from(data, "base64"));
+          that._onData(crypto.Buffer.from(data, "base64"));
         });
         that.conn.on("close", () => that.peer.destroy());
         that._onStarted();
@@ -108,7 +110,7 @@ export class PeerjsChannel implements Channel {
     this.conn.send(data.toString("base64"));
   }
 
-  async receive(): Promise<Buffer> {
+  async receive(): Promise<crypto.Buffer> {
     const that = this;
     return new Promise((resolve) => (that._onData = resolve));
   }

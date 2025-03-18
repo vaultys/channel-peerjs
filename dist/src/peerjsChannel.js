@@ -1,6 +1,6 @@
 import { Peer } from "peerjs";
 import { CryptoChannel, crypto } from "@vaultys/id";
-const { hash, randomBytes } = crypto;
+const { randomBytes } = crypto;
 export class PeerjsChannel {
     constructor(key, status, host = "peerjs.92k.de") {
         this.host = host;
@@ -12,9 +12,11 @@ export class PeerjsChannel {
         }
         this.otherstatus = this.status == "initiator" ? "receiver" : "initiator";
         this.key = key ?? randomBytes(32).toString("hex");
-        this.id = hash("sha256", Buffer.from(`vaultys-${this.status}-${this.key}`)).toString("hex");
+        this.id = crypto
+            .hash("sha256", crypto.Buffer.from(`vaultys-${this.status}-${this.key}`))
+            .toString("hex");
         this.otherid = crypto
-            .hash("sha256", Buffer.from(`vaultys-${this.otherstatus}-${this.key}`))
+            .hash("sha256", crypto.Buffer.from(`vaultys-${this.otherstatus}-${this.key}`))
             .toString("hex");
         const options = {
             debug: 2,
@@ -35,14 +37,14 @@ export class PeerjsChannel {
                 that.conn = conn;
                 that.conn.on("data", (data) => {
                     console.log("receiving: ", data);
-                    that._onData(Buffer.from(data, "base64"));
+                    that._onData(crypto.Buffer.from(data, "base64"));
                 });
                 that.conn.on("close", () => that.peer.destroy());
                 //console.log("_onStarted call", that);
                 that._onStarted();
             });
         }
-        CryptoChannel.encryptChannel(this, Buffer.from(this.key, "hex"));
+        CryptoChannel.encryptChannel(this, crypto.Buffer.from(this.key, "hex"));
     }
     static fromConnectionString(string) {
         if (string.startsWith("vaultys://peerjs?")) {
@@ -69,7 +71,7 @@ export class PeerjsChannel {
                 console.log("opening PeerJS Channel...");
                 that.conn.on("data", (data) => {
                     console.log("receiving: ", data);
-                    that._onData(Buffer.from(data, "base64"));
+                    that._onData(crypto.Buffer.from(data, "base64"));
                 });
                 that.conn.on("close", () => that.peer.destroy());
                 that._onStarted();

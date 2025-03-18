@@ -11,13 +11,13 @@ export declare class PeerjsChannel implements Channel {
     conn: any;
     _onStarted: () => void;
     _onError: (error: string) => void;
-    _onData: (data: Buffer) => void;
+    _onData: (data: crypto.Buffer) => void;
     constructor(key?: string, status?: "initiator" | "receiver", host?: string);
     static fromConnectionString(string: string): PeerjsChannel | null;
     fromConnectionString(string: string): PeerjsChannel | null;
     getConnectionString(): string;
     start(): Promise<void>;
     send(data: crypto.Buffer): Promise<void>;
-    receive(): Promise<Buffer>;
+    receive(): Promise<crypto.Buffer>;
     close(): Promise<void>;
 }
