@@ -9,6 +9,7 @@ export declare class PeerjsChannel implements Channel {
     otherid: string;
     peer: Peer;
     conn: any;
+    _onConnected?: () => void;
     _onStarted: () => void;
     _onError: (error: string) => void;
     _onData: (data: crypto.Buffer) => void;
@@ -16,6 +17,7 @@ export declare class PeerjsChannel implements Channel {
     static fromConnectionString(string: string): PeerjsChannel | null;
     fromConnectionString(string: string): PeerjsChannel | null;
     getConnectionString(): string;
+    onConnected(callback: () => void): void;
     start(): Promise<void>;
     send(data: crypto.Buffer): Promise<void>;
     receive(): Promise<crypto.Buffer>;

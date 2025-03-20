@@ -11,6 +11,7 @@ export class PeerjsChannel implements Channel {
   otherid: string;
   peer: Peer;
   conn: any;
+  _onConnected?: () => void;
   _onStarted!: () => void;
   _onError!: (error: string) => void;
   _onData!: (data: crypto.Buffer) => void;
@@ -53,6 +54,8 @@ export class PeerjsChannel implements Channel {
       const that = this;
       that.peer.on("connection", (conn) => {
         console.log("PeerJs connection incoming...");
+        that._onConnected?.();
+        delete that._onConnected;
         that.conn = conn;
         that.conn.on("data", (data: string) => {
           console.log("receiving: ", data);
@@ -85,12 +88,18 @@ export class PeerjsChannel implements Channel {
     return `vaultys://peerjs?key=${this.key}&host=${this.host}`;
   }
 
+  onConnected(callback: () => void) {
+    this._onConnected = callback;
+  }
+
   async start() {
     const that = this;
     if (this.status === "receiver") {
       this.conn = this.peer.connect(this.otherid);
       that.conn.on("open", (id: string) => {
         console.log("opening PeerJS Channel...");
+        that._onConnected?.();
+        delete that._onConnected;
         that.conn.on("data", (data: string) => {
           console.log("receiving: ", data);
           that._onData(crypto.Buffer.from(data, "base64"));
