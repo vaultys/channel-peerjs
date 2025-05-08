@@ -71,7 +71,7 @@ export class PeerjsChannel {
     async start() {
         const that = this;
         if (this.status === "receiver") {
-            this.conn = this.peer.connect(this.otherid);
+            this.conn = this.peer.connect(this.otherid, { reliable: true });
             that.conn.on("open", (id) => {
                 console.log("opening PeerJS Channel...");
                 that._onConnected?.();

@@ -1,6 +1,6 @@
 {
   "name": "@vaultys/channel-peerjs",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "P2P communication for the protocol Vaultys based on webRTC",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,8 @@
   "scripts": {
     "build:test": "webpack --config webpack.test.config.js",
     "test:server": "http-server . -p 8080",
-    "test": "mocha --require tsx test/setup.ts --timeout 10000",
+    "test:browser": "mocha --require tsx test/setup.ts --timeout 10000",
+    "test:node": "mocha --require tsx test/*.test.ts --timeout 10000",
     "build": "tsc",
     "prettier": "find src -name \"*.js\" | xargs prettier --trailing-comma=all --write"
   },
