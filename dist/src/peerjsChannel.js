@@ -71,18 +71,26 @@ export class PeerjsChannel {
     async start() {
         const that = this;
         if (this.status === "receiver") {
-            this.conn = this.peer.connect(this.otherid, { reliable: true });
-            that.conn.on("open", (id) => {
-                console.log("opening PeerJS Channel...");
-                that._onConnected?.();
-                delete that._onConnected;
-                that.conn.on("data", (data) => {
-                    console.log("receiving: ", data);
-                    that._onData(crypto.Buffer.from(data, "base64"));
+            const connect = () => {
+                that.conn = that.peer.connect(that.otherid, { reliable: true });
+                that.conn.on("open", (id) => {
+                    console.log("opening PeerJS Channel...");
+                    that._onConnected?.();
+                    delete that._onConnected;
+                    that.conn.on("data", (data) => {
+                        console.log("receiving: ", data);
+                        that._onData(crypto.Buffer.from(data, "base64"));
+                    });
+                    that.conn.on("close", () => that.peer.destroy());
+                    that._onStarted();
                 });
-                that.conn.on("close", () => that.peer.destroy());
-                that._onStarted();
-            });
+            };
+            // Dial only once our own peer is registered with the signalling server: an offer sent before
+            // that can be dropped, leaving start() pending forever.
+            if (this.peer.open)
+                connect();
+            else
+                this.peer.once("open", connect);
         }
         return new Promise((resolve, reject) => {
             that._onStarted = resolve;
