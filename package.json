@@ -16,7 +16,7 @@
     "prettier": "find src -name \"*.js\" | xargs prettier --trailing-comma=all --write"
   },
   "dependencies": {
-    "peerjs": "^1.5.4"
+    "peerjs": "^1.5.5"
   },
   "peerDependencies": {
     "@vaultys/id": ">=2.4.1"
